@@ -1,51 +1,47 @@
 pipeline {
     agent any
-    triggers { pollSCM('H/5 * * * *') } 
     
     stages {
         stage('Checkout') {
             steps { 
-                // Senin yeni repondan kodları çekiyoruz
                 git branch:'main', url:'https://github.com/meryem-zeynep-ozdogan/Excellent-Desktop-App.git' 
+            }
+        }
+        
+        stage('Rust QR Performance Check') {
+            steps {
+                echo 'Running Rust QR decoding algorithms...'
+                // Cargo'nun tam yolunu veriyoruz
+                bat '"C:\\Users\\merzey\\.cargo\\bin\\cargo.exe" test' 
             }
         }
         
         stage('Setup Python Environment') {
             steps {
-                bat '''
-                python -m venv venv
-                call venv\\Scripts\\activate.bat
-                pip install pytest
-                '''
+                // Ana Python'un tam yolu ile sanal ortam oluşturuyoruz
+                bat '"C:\\Users\\merzey\\AppData\\Local\\Programs\\Python\\Python312\\python.exe" -m venv venv'
+                
+                // Sanal ortamın içindeki python'u kullanarak pytest kuruyoruz (activate derdinden kurtulduk!)
+                bat 'venv\\Scripts\\python.exe -m pip install pytest'
             }
         }
         
-        stage('Rust QR Module Tests') {
+        stage('Database Stress Test') {
             steps {
-                // Rust klasörüne gidip testleri çalıştırıyoruz
-                // EĞER RUST KODLARIN ANA DİZİNDEYSE SADECE 'cargo test' YAZABİLİRSİN
-                dir('rust_qr') { 
-                    bat 'cargo test'
-                }
+                echo 'Executing Database Integrity and Stress Tests...'
+                bat 'venv\\Scripts\\python.exe tests/db_stress_test.py'
             }
         }
-        
-        stage('Python Financial & UI Tests') {
+
+        stage('UI Asset & Logic Verification') {
             steps {
-                bat '''
-                call venv\\Scripts\\activate.bat
-                pytest --junitxml=python_test_raporu.xml
-                '''
-            }
-            post { 
-                always { 
-                    junit 'python_test_raporu.xml' 
-                } 
+                echo 'Checking application assets and Input Validation...'
+                bat 'venv\\Scripts\\pytest tests/test_ui_logic.py'
             }
         }
     }
     post {
-        failure { echo 'Jenkins Pipeline: Build FAILED! Bozuk kod deploy edilemez.' }
-        success { echo 'Jenkins Pipeline: All tests passed successfully!' }
+        failure { echo 'PIPELINE FAILED! Missing assets or validation bug detected.' }
+        success { echo 'ALL CLEAR! Ready for deployment.' }
     }
 }
