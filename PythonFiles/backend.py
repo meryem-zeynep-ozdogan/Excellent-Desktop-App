@@ -37,7 +37,7 @@ class Backend:
             for handler in self.handlers:
                 try:
                     handler(*args, **kwargs)
-                except Exception as e:
+                except Exception:
                     pass
 
     # ------------------------------------------------------------------------
@@ -563,7 +563,7 @@ class Backend:
                     if usd_sell and eur_sell:                        
                         return {'USD': usd_sell, 'EUR': eur_sell}
                         
-                except Exception as e:
+                except Exception:
                     # logging.warning(f"Tarihli kur çekme hatası ({current_date.strftime('%d.%m.%Y')}): {e}")
                     continue
             

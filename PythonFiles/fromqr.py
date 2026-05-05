@@ -875,7 +875,7 @@ class OptimizedQRProcessor:
             
             return None
             
-        except Exception as e:
+        except Exception:
             return None
     
     def _group_words_into_rows(self, words, y_tolerance=5):
@@ -1149,7 +1149,7 @@ class OptimizedQRProcessor:
                         'extracted_info': extracted_info
                     }
                 else:
-                    logging.warning(f"   ⚠️ PDF'den yeterli bilgi çıkarılamadı (firma veya tutar yok)")
+                    logging.warning("   ⚠️ PDF'den yeterli bilgi çıkarılamadı (firma veya tutar yok)")
             
             # Hiçbir bilgi çıkarılamadı
             return {
@@ -1221,7 +1221,7 @@ class OptimizedQRProcessor:
                     return date_str
         
         # Bulunamadıysa bugünün tarihi
-        logging.warning(f"   PDF'de tarih bulunamadi, bugun kullanilacak")
+        logging.warning("   PDF'de tarih bulunamadi, bugun kullanilacak")
         return datetime.now().strftime("%d.%m.%Y")
     
     def _extract_invoice_number_from_text(self, pdf_text):
@@ -1985,7 +1985,7 @@ class QRInvoiceIntegrator:
                 tutar_related[key] = value
         
         if not tutar_related:
-            logging.warning(f"      ⚠️ Tutar ile ilgili hiçbir alan bulunamadı!")
+            logging.warning("      ⚠️ Tutar ile ilgili hiçbir alan bulunamadı!")
         
         # Anahtar eşleme sözlüğü
         key_map = {
@@ -2121,7 +2121,7 @@ class QRInvoiceIntegrator:
             parsed['kdv_tutari'] = kdv_tutari if kdv_tutari > 0 else round(matrah * parsed['kdv_yuzdesi'] / 100, 2)
         else:
             # Hiçbiri yok - QR JSON'dan herhangi bir sayısal değer bul
-            logging.warning(f"      ⚠️ Standart tutar alanları bulunamadı, alternatif arama yapılıyor...")
+            logging.warning("      ⚠️ Standart tutar alanları bulunamadı, alternatif arama yapılıyor...")
             
             # Tüm JSON alanlarını tara, sayısal değerleri bul
             possible_amounts = []
@@ -2149,7 +2149,7 @@ class QRInvoiceIntegrator:
                 parsed['kdv_tutari'] = round(best_amount * parsed['kdv_yuzdesi'] / 100, 2)
             else:
                 # Gerçekten hiçbir tutar yok
-                logging.error(f"      ❌ QR'da hiçbir tutar bilgisi bulunamadı!")
+                logging.error("      ❌ QR'da hiçbir tutar bilgisi bulunamadı!")
                 logging.error(f"      📋 QR JSON: {json.dumps(qr_json, indent=2, ensure_ascii=False)}")
                 parsed['toplam_tutar'] = 0.0
                 parsed['kdv_dahil'] = False
@@ -2231,7 +2231,7 @@ class QRInvoiceIntegrator:
                     return date_str
         
         # Bulunamadıysa bugünün tarihi
-        logging.warning(f"   ⚠️ PDF'de tarih bulunamadı, bugün kullanılacak")
+        logging.warning("   ⚠️ PDF'de tarih bulunamadı, bugün kullanılacak")
         return datetime.now().strftime("%d.%m.%Y")
     
     def _extract_invoice_number_from_text(self, pdf_text):

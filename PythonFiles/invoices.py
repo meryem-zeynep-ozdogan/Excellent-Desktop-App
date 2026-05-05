@@ -203,8 +203,8 @@ class InvoiceProcessor:
             kdv_tutari_input = self._to_decimal(processed.get('kdv_tutari', 0)) 
             birim = processed.get('birim', 'TL')
             
-            logging.debug(f"\n   🧾 FATURA İŞLEME BAŞLADI (MATRAH SİSTEMİ - DECIMAL)")
-            logging.debug(f"   📋 Giriş Verileri:")
+            logging.debug("\n   🧾 FATURA İŞLEME BAŞLADI (MATRAH SİSTEMİ - DECIMAL)")
+            logging.debug("   📋 Giriş Verileri:")
             logging.debug(f"     - Girilen Matrah: {toplam_tutar} {birim}")
             logging.debug(f"     - KDV Yüzdesi: {kdv_yuzdesi}%")
             
@@ -285,7 +285,7 @@ class InvoiceProcessor:
                     kdv_tutari_tl = kdv_tutari_tl.quantize(Decimal('0.00001'))
                     matrah_tl_decimal = matrah_tl_decimal.quantize(Decimal('0.00001'))
                     
-                    logging.debug(f"   ✅ KDV HESAPLAMA (MATRAH ESASLI):")
+                    logging.debug("   ✅ KDV HESAPLAMA (MATRAH ESASLI):")
                     logging.debug(f"     - Girilen Matrah: {toplam_tutar} {birim}")
                     logging.debug(f"     - Kur: {conversion_rate}")
                     logging.debug(f"     - Matrah (TL): {matrah_tl_decimal} TL")
@@ -300,7 +300,7 @@ class InvoiceProcessor:
                     kdv_tutari_tl = Decimal('0')
                     
             else:
-                logging.error(f"   ❌ HATA: Toplam tutar girilmemiş!")
+                logging.error("   ❌ HATA: Toplam tutar girilmemiş!")
                 return None
             
             # Toplam tutar girilen değer olarak kalır (artırılmaz)
@@ -337,11 +337,11 @@ class InvoiceProcessor:
             processed['eur_rate'] = round(float(eur_to_tl), 5)
             processed['matrah'] = round(float(matrah_tl_decimal), 5)
             
-            logging.debug(f"   📊 SONUÇ (TL CİNSİNDEN):")
+            logging.debug("   📊 SONUÇ (TL CİNSİNDEN):")
             logging.debug(f"     - Matrah: {matrah_tl_decimal:.2f} TL")
             logging.debug(f"     - KDV Tutarı: {kdv_tutari_tl:.2f} TL") 
             logging.debug(f"     - TOPLAM (KDV DAHİL): {toplam_kdv_dahil_tl:.2f} TL")
-            logging.debug(f"   ✅ İşlem başarılı!\n")
+            logging.debug("   ✅ İşlem başarılı!\n")
             
             return processed
 
@@ -420,14 +420,14 @@ class InvoiceManager:
                     self._add_history_record('EKLEME', 'gelir', processed_data)
                     logging.info(f"✅ GELİR faturası eklendi (ID: {result})")
                 else:
-                    logging.error(f"❌ GELİR faturası eklenemedi!")
+                    logging.error("❌ GELİR faturası eklenemedi!")
             elif invoice_type == 'incoming':
                 result = self.backend.db.add_gider_invoice(processed_data)
                 if result:
                     self._add_history_record('EKLEME', 'gider', processed_data)
                     logging.info(f"✅ GİDER faturası eklendi (ID: {result})")
                 else:
-                    logging.error(f"❌ GİDER faturası eklenemedi!")
+                    logging.error("❌ GİDER faturası eklenemedi!")
             else:
                 logging.error(f"❌ Geçersiz invoice_type: {invoice_type}")
                 return False

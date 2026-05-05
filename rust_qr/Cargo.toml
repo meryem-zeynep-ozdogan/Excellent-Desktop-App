@@ -11,3 +11,10 @@ crate-type = ["cdylib"]
 pyo3 = { version = "0.27", features = ["extension-module"] }
 rxing = "0.8.3"                                              # QR okuma
 image = "0.25"                                               # Resim işleme
+
+[dev-dependencies]
+criterion = "0.5"
+
+[[bench]]
+name = "qr_benchmark"
+harness = false

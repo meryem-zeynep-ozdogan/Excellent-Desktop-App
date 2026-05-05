@@ -55,7 +55,7 @@ class InvoicePDFExporter:
                 pdfmetrics.registerFont(TTFont('Calibri-Turkish', calibri_path))
                 
                 
-        except Exception as e:
+        except Exception:
             # Font yüklenemezse varsayılan fontlar kullanılır
             pass
     
@@ -191,7 +191,7 @@ class InvoicePDFExporter:
             doc.build(story)
             return True
             
-        except Exception as e:
+        except Exception:
             return False
 
     def export_general_expenses_to_pdf(self, expense_data, file_path, lang='tr'):
@@ -227,7 +227,7 @@ class InvoicePDFExporter:
             doc.build(story)
             return True
             
-        except Exception as e:
+        except Exception:
             return False
 
     def _get_title_by_type(self, invoice_type, lang='tr'):
@@ -824,7 +824,7 @@ def export_monthly_income_to_pdf(year, monthly_results, quarterly_results, summa
         doc.build(story)
         return True
         
-    except Exception as e:
+    except Exception:
         return False
 
 def export_monthly_general_expenses_to_pdf(expense_data, year=None, file_path=None, lang='tr'):
@@ -835,7 +835,7 @@ def export_monthly_general_expenses_to_pdf(expense_data, year=None, file_path=No
         from reportlab.lib import colors
         from reportlab.lib.pagesizes import A4, landscape
         from reportlab.lib.units import cm
-        from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+        from reportlab.lib.styles import ParagraphStyle
         from reportlab.lib.enums import TA_CENTER
         
         if not year:
@@ -980,5 +980,5 @@ def export_monthly_general_expenses_to_pdf(expense_data, year=None, file_path=No
         doc.build(story)
         return True
         
-    except Exception as e:
+    except Exception:
         return False

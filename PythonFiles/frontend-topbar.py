@@ -9,7 +9,7 @@ kullanıcı arayüzünü içerir. Backend ile asenkron olarak haberleşir.
 
 # Merkezi imports'tan gerekli kütüphaneleri al
 from imports import (
-    ft, datetime, time, threading, Decimal, os, sys, 
+    ft, datetime, time, threading, os, sys, 
     win32event, win32api, winerror, ctypes, traceback
 )
 
@@ -34,7 +34,6 @@ except Exception:
 
 # Backend modüllerini import et
 from backend import Backend
-from invoices import InvoiceProcessor
 from locales import get_text
 
 # Tek instance kontrolü (Uygulamanın ikinci kez açılmasını engeller)
@@ -61,9 +60,9 @@ def on_backend_data_updated():
             if callback is not None:
                 try:
                     callback()
-                except Exception as ex:
+                except Exception:
                     pass
-    except Exception as e:
+    except Exception:
         pass
 
 def on_backend_status_updated(message, duration):
@@ -520,7 +519,7 @@ def create_invoice_table_content(sort_option="newest", invoice_type="income", on
                     ]
                 )
                 rows.append(row)
-    except Exception as e:
+    except Exception:
         pass
 
     # Select All Checkbox Logic
@@ -784,7 +783,7 @@ def create_donemsel_table(year=None, tax_fields=None, on_tax_change=None):
         
         return ft.Column([header_row] + quarter_blocks)
         
-    except Exception as e:
+    except Exception:
         return ft.Text(tr("error_loading_data"))
 
 # ============================================================================
@@ -1171,7 +1170,7 @@ class AnimatedDonut(ft.Stack):
             # Güncellemeyi uygula
             self.chart_container.update()
             self.text_container.update()
-        except Exception as e:
+        except Exception:
             pass
 
 class DonutStatCard(ft.Container):
@@ -1412,7 +1411,7 @@ def main(page: ft.Page):
             except:
                 pass
             
-        except Exception as e:
+        except Exception:
             pass
         
         # Eğer hiç yıl bulunamadıysa mevcut yılı ekle
@@ -1458,7 +1457,7 @@ def main(page: ft.Page):
                         yearly_data[year] = {"gelir": [0]*12, "gider": [0]*12}
                     
                     yearly_data[year]["gelir"][month-1] += amount
-                except (ValueError, IndexError) as ex:
+                except (ValueError, IndexError):
                     continue
             
             # Gider faturalarını işle
@@ -1502,7 +1501,7 @@ def main(page: ft.Page):
                 return {}
             
             return yearly_data
-        except Exception as e:
+        except Exception:
             return {}
     
     # ------------------------------------------------------------------------
@@ -1596,7 +1595,7 @@ def main(page: ft.Page):
             line_chart.data_series[1].data_points = [ft.LineChartDataPoint(i, full_data[year]["gider"][i], tooltip=f"{symbol}{full_data[year]['gider'][i]:.1f}K") for i in range(12)]
             try: 
                 line_chart.update()
-            except Exception as ex:
+            except Exception:
                 pass
             return
 
@@ -1627,7 +1626,7 @@ def main(page: ft.Page):
         state["animation_completed"] = True 
         try:
             if line_chart.page: line_chart.update()
-        except Exception as ex:
+        except Exception:
             pass
 
     def on_year_change(e): 
@@ -1665,7 +1664,7 @@ def main(page: ft.Page):
                 
                 # Aylık ortalama donut
                 state["donuts"][3].update_value(year_stats['monthly_avg'], avg_max, format_currency(year_stats['monthly_avg'], currency=current_currency, compact=True))
-        except Exception as e:
+        except Exception:
             pass
 
     # Backend callback'ini yeniden tanımla (grafikleri güncellemek için)
@@ -1743,7 +1742,7 @@ def main(page: ft.Page):
             except:
                 pass
                         
-        except Exception as e:
+        except Exception:
             pass
     
     # Ana sayfa için birleşik callback - hem grafikler hem işlem geçmişi
@@ -2333,7 +2332,7 @@ def main(page: ft.Page):
                     selected_count_text.update()
                     table_container.update()
                     page.update()
-            except Exception as ex:
+            except Exception:
                 pass
         
         table_container = ft.Container(
@@ -2430,7 +2429,7 @@ def main(page: ft.Page):
                 selected_count_text.visible = False
                 
                 page.update()
-            except Exception as ex:
+            except Exception:
                 pass
 
         def add_invoice(e):
@@ -3390,7 +3389,7 @@ def main(page: ft.Page):
                 'income_count': len(income_invoices),
                 'expense_count': len(expense_invoices)
             }
-        except Exception as e:
+        except Exception:
             return {
                 'net_profit': 0,
                 'total_income': 0,
@@ -3465,7 +3464,7 @@ def main(page: ft.Page):
                 # İşlem geçmişinden son kayıtları al
                 history_records = backend_instance.get_recent_history(limit=10)
                 return _process_history_records(history_records)
-            except Exception as e:
+            except Exception:
                 return []
         
         def _process_history_records(records):
@@ -3947,7 +3946,7 @@ def main(page: ft.Page):
                 page.overlay.append(update_dlg)
                 update_dlg.open = True
                 page.update()
-        except Exception as e:
+        except Exception:
             pass
 
     # Ana sayfa yüklendiğinde güncelleme kontrolü yap
