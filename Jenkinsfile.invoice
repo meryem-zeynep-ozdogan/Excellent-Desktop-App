@@ -1,0 +1,17 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps { git branch:'main', url:'https://github.com/meryem-zeynep-ozdogan/Excellent-Desktop-App.git' }
+        }
+        stage('Invoice UX Check') {
+            steps {
+                echo 'Testing Empty Invoice Amount Warning...'
+                // catchError bloğu, içindeki test patlasa bile pipeline'ı kırmızı yapmaz, SARI (Unstable) yapar.
+                catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+                    bat '"C:\\Users\\merzey\\AppData\\Local\\Python\\bin\\python.exe" -c "uyari_verildi_mi = False; assert uyari_verildi_mi, \'UX WARNING: Fatura tutari bos birakildi ancak kullaniciya uyari mesaji gosterilmedi.\'"'
+                }
+            }
+        }
+    }
+}

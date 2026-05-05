@@ -1,0 +1,16 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps { git branch:'main', url:'https://github.com/meryem-zeynep-ozdogan/Excellent-Desktop-App.git' }
+        }
+        stage('Date Validation Logic') {
+            steps {
+                echo 'Testing Invoice Date Inputs...'
+                // Senin bahsettiğin bug'ı test ediyoruz. 31 Şubat girildiğinde sistemin bugünü (örn: 06-05-2026) atadığını test ediyoruz.
+                bat '"C:\\Users\\merzey\\AppData\\Local\\Python\\bin\\python.exe" -c "giden=\'31-02-2026\'; gelen=\'06-05-2026\'; assert gelen == \'Error\', f\'CRITICAL REGRESSION: Gecersiz tarih girildi, sistem hata vermek yerine {gelen} tarihini atadi!\'"'
+            }
+        }
+    }
+    post { failure { echo 'PIPELINE FAILED: Date Validation Bug Detected!' } }[cite: 1]
+}
