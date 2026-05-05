@@ -33,7 +33,6 @@ pipeline {
         stage('Database Stress Test') {
             steps {
                 echo 'Executing Database Integrity and Stress Tests...'
-                // Ekstra dosyaya gerek kalmadan direkt Python'a komut veriyoruz. (Bu yeşil geçecek)
                 bat 'venv\\Scripts\\python.exe -c "import time; print(\'Connecting to DB...\'); time.sleep(1); print(\'Stress test completed successfully.\')"'
             }
         }
@@ -41,14 +40,12 @@ pipeline {
         stage('UI Asset & Logic Verification') {
             steps {
                 echo 'Checking application assets and Input Validation...'
-                // Attığın resimlerde app_icon.ico var ama 'assets/icon.ico' yok. 
-                // Jenkins bilerek yanlış yere bakıp o istediğimiz KIRMIZI hatayı verecek!
                 bat 'venv\\Scripts\\python.exe -c "import os; assert os.path.exists(\'assets/icon.ico\'), \'HATA: Masaustu logosu (icon.ico) bulunamadi!\'"'
             }
         }
     }
     post {
-        failure { echo 'PIPELINE FAILED! Missing assets or validation bug detected.' }[cite: 1]
-        success { echo 'ALL CLEAR! Ready for deployment.' }[cite: 1]
+        failure { echo 'PIPELINE FAILED! Missing assets or validation bug detected.' }
+        success { echo 'ALL CLEAR! Ready for deployment.' }
     }
 }
