@@ -3,6 +3,8 @@ pipeline {
     environment {
         RUSTUP_HOME = "C:\\Users\\merzey\\.rustup"
         CARGO_HOME  = "C:\\Users\\merzey\\.cargo"
+        // İŞTE UNUTTUĞUMUZ O KRİTİK SATIR:
+        PYO3_PYTHON = "C:\\Users\\merzey\\AppData\\Local\\Python\\bin\\python.exe"
     }
     stages {
         stage('Checkout') {
