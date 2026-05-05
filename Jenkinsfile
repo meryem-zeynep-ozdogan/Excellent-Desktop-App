@@ -1,11 +1,11 @@
 pipeline {
     agent any
     
-    // Hem Rust'ın hem de PyO3'ün yollarını Jenkins'e öğretiyoruz
     environment {
         RUSTUP_HOME = "C:\\Users\\merzey\\.rustup"
         CARGO_HOME  = "C:\\Users\\merzey\\.cargo"
-        PYO3_PYTHON = "C:\\Users\\merzey\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+        // İŞTE GERÇEK YOLUN BU:
+        PYO3_PYTHON = "C:\\Users\\merzey\\AppData\\Local\\Python\\bin\\python.exe"
     }
     
     stages {
@@ -26,7 +26,8 @@ pipeline {
         
         stage('Setup Python Environment') {
             steps {
-                bat '"C:\\Users\\merzey\\AppData\\Local\\Programs\\Python\\Python312\\python.exe" -m venv venv'
+                // Burayı da senin gerçek yolunla güncelledim
+                bat '"C:\\Users\\merzey\\AppData\\Local\\Python\\bin\\python.exe" -m venv venv'
                 bat 'venv\\Scripts\\python.exe -m pip install pytest'
             }
         }
