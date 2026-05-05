@@ -1,9 +1,11 @@
 pipeline {
     agent any
     
+    // Hem Rust'ın hem de PyO3'ün yollarını Jenkins'e öğretiyoruz
     environment {
         RUSTUP_HOME = "C:\\Users\\merzey\\.rustup"
         CARGO_HOME  = "C:\\Users\\merzey\\.cargo"
+        PYO3_PYTHON = "C:\\Users\\merzey\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
     }
     
     stages {
@@ -16,7 +18,6 @@ pipeline {
         stage('Rust QR Performance Check') {
             steps {
                 echo 'Running Rust QR decoding algorithms...'
-                // Jenkins'e önce rust_qr klasörüne girmesini söylüyoruz
                 dir('rust_qr') {
                     bat '"C:\\Users\\merzey\\.cargo\\bin\\cargo.exe" test' 
                 }
