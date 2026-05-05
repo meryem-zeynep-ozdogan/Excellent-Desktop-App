@@ -1,6 +1,12 @@
 pipeline {
     agent any
     
+    // Jenkins'e Rust'ın nerede olduğunu ve kimin ayarlarını kullanacağını öğretiyoruz
+    environment {
+        RUSTUP_HOME = "C:\\Users\\merzey\\.rustup"
+        CARGO_HOME  = "C:\\Users\\merzey\\.cargo"
+    }
+    
     stages {
         stage('Checkout') {
             steps { 
@@ -11,17 +17,13 @@ pipeline {
         stage('Rust QR Performance Check') {
             steps {
                 echo 'Running Rust QR decoding algorithms...'
-                // Cargo'nun tam yolunu veriyoruz
                 bat '"C:\\Users\\merzey\\.cargo\\bin\\cargo.exe" test' 
             }
         }
         
         stage('Setup Python Environment') {
             steps {
-                // Ana Python'un tam yolu ile sanal ortam oluşturuyoruz
                 bat '"C:\\Users\\merzey\\AppData\\Local\\Programs\\Python\\Python312\\python.exe" -m venv venv'
-                
-                // Sanal ortamın içindeki python'u kullanarak pytest kuruyoruz (activate derdinden kurtulduk!)
                 bat 'venv\\Scripts\\python.exe -m pip install pytest'
             }
         }
