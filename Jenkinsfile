@@ -1,7 +1,6 @@
 pipeline {
     agent any
     
-    // Jenkins'e Rust'ın nerede olduğunu ve kimin ayarlarını kullanacağını öğretiyoruz
     environment {
         RUSTUP_HOME = "C:\\Users\\merzey\\.rustup"
         CARGO_HOME  = "C:\\Users\\merzey\\.cargo"
@@ -17,7 +16,10 @@ pipeline {
         stage('Rust QR Performance Check') {
             steps {
                 echo 'Running Rust QR decoding algorithms...'
-                bat '"C:\\Users\\merzey\\.cargo\\bin\\cargo.exe" test' 
+                // Jenkins'e önce rust_qr klasörüne girmesini söylüyoruz
+                dir('rust_qr') {
+                    bat '"C:\\Users\\merzey\\.cargo\\bin\\cargo.exe" test' 
+                }
             }
         }
         
